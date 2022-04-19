@@ -1,11 +1,16 @@
 import datetime
 import os
+import random
+import re
+import time
 from pathlib import Path
-import telegram
-
 
 import requests
+import telegram
 from environs import Env
+
+IMG_DIR = 'images/nasa/'
+PATTERN_DATE_APOD = r'[\d-]+'
 
 
 def download_img(img_url: str, path_to_download: str) -> None:
@@ -67,7 +72,7 @@ def get_nasa_apod(token: str, images_count: int | None = None) -> None:
         except KeyError:
             nasa_apod_img_url, nasa_apod_date = nasa_apod["url"], nasa_apod["date"]
         file_extension = get_file_extension(nasa_apod_img_url)
-        download_img(nasa_apod_img_url, f'nasa/apod/nasa_apod_{nasa_apod_date}{file_extension}')
+        download_img(nasa_apod_img_url, f'nasa/apod_nasa_{nasa_apod_date}{file_extension}')
 
 
 def get_nasa_epic(token: str, images_count: int) -> None:
@@ -91,22 +96,34 @@ def get_nasa_epic(token: str, images_count: int) -> None:
         response_img = requests.get(nasa_epic_img_url, params=payload)
         response_img.raise_for_status()
 
-        download_img(response_img.url, f'nasa/epic/{image}.png')
+        download_img(response_img.url, f'nasa/epic_nasa_{image}.png')
 
 
 def main():
+    """Download images and upload them on telegram using bot"""
     env = Env()
     env.read_env()
     nasa_api_token = env("NASA_API_TOKEN")
     telegram_api_token = env("TELEGRAM_API_TOKEN")
     telegram_chat_id = env("TELEGRAM_CHAT_ID")
+    sleep_time = env("SLEEP_TIME", 86400)
+    while True:
+        get_nasa_apod(nasa_api_token)
+        get_nasa_epic(nasa_api_token, 1)
 
-    bot = telegram.Bot(token=telegram_api_token)
-    bot.send_message(chat_id=telegram_chat_id, text="Hello.")
-
-    # fetch_spacex_last_launch()
-    # get_nasa_apod(nasa_api_token)
-    # get_nasa_epic(nasa_api_token, 1)
+        photo = open(os.path.join(IMG_DIR, random.choice(os.listdir(IMG_DIR))), 'rb')
+        if 'epic' in photo.name:
+            caption_text = 'Earth Polychromatic Imaging Camera from NASA'
+        elif 'apod' in photo.name:
+            match_date = re.search(f'{PATTERN_DATE_APOD}', f'{photo.name}')
+            date_apod = match_date[0] if match_date else ''
+            caption_text = f'Astronomy Picture of the Day {date_apod} from NASA'
+        else:
+            caption_text = None
+        bot = telegram.Bot(token=telegram_api_token)
+        bot.send_message(chat_id=telegram_chat_id, text="Hello. Today's photo of the day")
+        bot.send_photo(chat_id=telegram_chat_id, photo=photo, caption=caption_text)
+        time.sleep(float(sleep_time))
 
 
 if __name__ == "__main__":
