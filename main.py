@@ -1,6 +1,8 @@
 import datetime
 import os
 from pathlib import Path
+import telegram
+
 
 import requests
 from environs import Env
@@ -96,9 +98,15 @@ def main():
     env = Env()
     env.read_env()
     nasa_api_token = env("NASA_API_TOKEN")
-    fetch_spacex_last_launch()
-    get_nasa_apod(nasa_api_token)
-    get_nasa_epic(nasa_api_token, 1)
+    telegram_api_token = env("TELEGRAM_API_TOKEN")
+    telegram_chat_id = env("TELEGRAM_CHAT_ID")
+
+    bot = telegram.Bot(token=telegram_api_token)
+    bot.send_message(chat_id=telegram_chat_id, text="Hello.")
+
+    # fetch_spacex_last_launch()
+    # get_nasa_apod(nasa_api_token)
+    # get_nasa_epic(nasa_api_token, 1)
 
 
 if __name__ == "__main__":
