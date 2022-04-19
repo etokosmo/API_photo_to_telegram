@@ -22,7 +22,7 @@ def main():
         for branch in branches:
             dirpath, dirnames, filenames = branch
             for filename in filenames:
-                photo = open(f'{dirpath}\{filename}', 'rb')
+                photo = open(f'{dirpath}/{filename}', 'rb')
                 bot.send_photo(chat_id=telegram_chat_id, photo=photo, caption=get_caption_text(photo))
         time.sleep(float(sleep_time))
 
