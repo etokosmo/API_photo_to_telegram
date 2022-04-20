@@ -1,6 +1,6 @@
 import requests
 
-from module.module import get_file_extension, download_img
+from libs.download_utils import get_file_extension, download_img
 
 
 def fetch_spacex_last_launch() -> None:

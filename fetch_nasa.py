@@ -3,7 +3,7 @@ import datetime
 import requests
 from environs import Env
 
-from module.module import get_file_extension, download_img
+from libs.download_utils import get_file_extension, download_img
 
 
 def get_nasa_apod(token: str, images_count: int | None = None) -> None:

@@ -4,7 +4,7 @@ import time
 import telegram
 from environs import Env
 
-from module.module import get_caption_text
+from libs.download_utils import get_caption_text
 
 
 def main():
