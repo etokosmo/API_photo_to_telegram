@@ -7,6 +7,10 @@ import requests
 PATTERN_DATE_APOD = r'[\d-]+'
 
 
+def create_image_pathdir(path):
+    Path(f"./images/{path}").mkdir(parents=True, exist_ok=True)
+
+
 def download_img(img_url: str, path_to_download: str) -> None:
     """Download <img_url> in ./images/<path>"""
     try:
@@ -15,7 +19,7 @@ def download_img(img_url: str, path_to_download: str) -> None:
     except ValueError:
         path = ''
         name = path_to_download
-    Path(f"./images/{path}").mkdir(parents=True, exist_ok=True)
+    create_image_pathdir(path)
     filename = f'./images/{path}{name}'
 
     response = requests.get(img_url)
@@ -40,5 +44,3 @@ def get_caption_text(photo):
         return f'Astronomy Picture of the Day {date_apod} from NASA'
     elif 'spacex' in photo.name:
         return 'Photos from last SpaceX launch'
-    else:
-        return None
