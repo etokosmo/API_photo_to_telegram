@@ -13,15 +13,9 @@ def create_image_pathdir(path):
 
 def download_img(img_url: str, path_to_download: str) -> None:
     """Download <img_url> in ./images/<path>"""
-    try:
-        path, name = path_to_download.rsplit('/', 1)
-        path += '/'
-    except ValueError:
-        path = ''
-        name = path_to_download
+    path, name = os.path.split(path_to_download)
     create_image_pathdir(path)
-    filename = f'./images/{path}{name}'
-
+    filename = f'./images/{path}/{name}'
     response = requests.get(img_url)
     response.raise_for_status()
 

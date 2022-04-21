@@ -8,6 +8,8 @@ from libs.download_utils import get_file_extension, download_img
 
 def get_nasa_apod(token: str, images_count: int | None = None) -> None:
     """Download Astronomy Picture of the Day from NASA"""
+    if not isinstance(images_count, int) or images_count < 1:
+        images_count = None
     nasa_apod_url = f'https://api.nasa.gov/planetary/apod'
 
     payload = {
@@ -19,7 +21,7 @@ def get_nasa_apod(token: str, images_count: int | None = None) -> None:
     response.raise_for_status()
 
     nasa_apods_json = response.json()
-    if images_count:
+    if not images_count:
         nasa_apods_json = [nasa_apods_json]
     for nasa_apod in nasa_apods_json:
         nasa_apod_img_url = nasa_apod.get("hdurl", nasa_apod.get("url"))
