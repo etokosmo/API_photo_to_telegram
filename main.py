@@ -18,13 +18,13 @@ def main():
     while True:
         branches = os.walk("images")
         bot = telegram.Bot(token=telegram_api_token)
-        bot.send_message(chat_id=telegram_chat_id, text="Hello. Today's photos:")
         for branch in branches:
             dirpath, dirnames, filenames = branch
             for filename in filenames:
+                bot.send_message(chat_id=telegram_chat_id, text="Hello. Today's photos:")
                 with open(f'{dirpath}/{filename}', 'rb') as photo:
                     bot.send_photo(chat_id=telegram_chat_id, photo=photo, caption=get_caption_text(photo))
-        time.sleep(float(sleep_time))
+                time.sleep(float(sleep_time))
 
 
 if __name__ == "__main__":
