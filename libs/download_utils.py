@@ -1,20 +1,14 @@
 import os
 import re
-from pathlib import Path
 
 import requests
 
 PATTERN_DATE_APOD = r'[\d-]+'
 
 
-def create_image_pathdir(path):
-    Path(f"./images/{path}").mkdir(parents=True, exist_ok=True)
-
-
 def download_img(img_url: str, path_to_download: str) -> None:
     """Download <img_url> in ./images/<path>"""
     path, name = os.path.split(path_to_download)
-    create_image_pathdir(path)
     filename = f'./images/{path}/{name}'
     response = requests.get(img_url)
     response.raise_for_status()

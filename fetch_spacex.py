@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import requests
 
 from libs.download_utils import get_file_extension, download_img
@@ -19,6 +21,7 @@ def fetch_spacex_last_launch() -> None:
 
 def main():
     """Download images from SpaceX"""
+    Path(f"./images/spacex").mkdir(parents=True, exist_ok=True)
     fetch_spacex_last_launch()
 
 

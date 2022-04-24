@@ -1,4 +1,5 @@
 import datetime
+from pathlib import Path
 
 import requests
 from environs import Env
@@ -58,6 +59,7 @@ def main():
     """Download images from NASA"""
     env = Env()
     env.read_env()
+    Path(f"./images/nasa").mkdir(parents=True, exist_ok=True)
     nasa_api_token = env("NASA_API_TOKEN")
     get_nasa_apod(nasa_api_token)
     get_nasa_epic(nasa_api_token, 1)
