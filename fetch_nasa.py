@@ -21,10 +21,10 @@ def get_nasa_apod(token: str, path: str, images_count: int | None = None) -> Non
     response = requests.get(nasa_apod_url, params=payload)
     response.raise_for_status()
 
-    nasa_apods_json = response.json()
+    nasa_apods = response.json()
     if not images_count:
-        nasa_apods_json = [nasa_apods_json]
-    for nasa_apod in nasa_apods_json:
+        nasa_apods = [nasa_apods]
+    for nasa_apod in nasa_apods:
         nasa_apod_img_url = nasa_apod.get("hdurl", nasa_apod.get("url"))
         nasa_apod_date = nasa_apod.get("date")
         file_extension = get_file_extension(nasa_apod_img_url)
