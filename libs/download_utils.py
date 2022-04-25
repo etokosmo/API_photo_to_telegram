@@ -9,7 +9,7 @@ PATTERN_DATE_APOD = r'[\d-]+'
 def download_img(img_url: str, path_to_download: str) -> None:
     """Download <img_url> in ./images/<path>"""
     path, name = os.path.split(path_to_download)
-    filename = f'./images/{path}/{name}'
+    filename = f'{path}/{name}'
     response = requests.get(img_url)
     response.raise_for_status()
 

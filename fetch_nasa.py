@@ -7,7 +7,7 @@ from environs import Env
 from libs.download_utils import get_file_extension, download_img
 
 
-def get_nasa_apod(token: str, images_count: int | None = None) -> None:
+def get_nasa_apod(token: str, path: str, images_count: int | None = None) -> None:
     """Download Astronomy Picture of the Day from NASA"""
     if not isinstance(images_count, int) or images_count < 1:
         images_count = None
@@ -28,10 +28,10 @@ def get_nasa_apod(token: str, images_count: int | None = None) -> None:
         nasa_apod_img_url = nasa_apod.get("hdurl", nasa_apod.get("url"))
         nasa_apod_date = nasa_apod.get("date")
         file_extension = get_file_extension(nasa_apod_img_url)
-        download_img(nasa_apod_img_url, f'nasa/apod_nasa_{nasa_apod_date}{file_extension}')
+        download_img(nasa_apod_img_url, f'{path}/apod_nasa_{nasa_apod_date}{file_extension}')
 
 
-def get_nasa_epic(token: str, images_count: int) -> None:
+def get_nasa_epic(token: str, path: str, images_count: int) -> None:
     """Download Earth Polychromatic Imaging Camera from NASA"""
     nasa_epic_url = f'https://api.nasa.gov/EPIC/api/natural'
 
@@ -52,17 +52,18 @@ def get_nasa_epic(token: str, images_count: int) -> None:
         response_img = requests.get(nasa_epic_img_url, params=payload)
         response_img.raise_for_status()
 
-        download_img(response_img.url, f'nasa/epic_nasa_{image}.png')
+        download_img(response_img.url, f'{path}/epic_nasa_{image}.png')
 
 
 def main():
     """Download images from NASA"""
     env = Env()
     env.read_env()
-    Path(f"./images/nasa").mkdir(parents=True, exist_ok=True)
+    download_path = "./images/nasa"
+    Path(f"{download_path}").mkdir(parents=True, exist_ok=True)
     nasa_api_token = env("NASA_API_TOKEN")
-    get_nasa_apod(nasa_api_token)
-    get_nasa_epic(nasa_api_token, 1)
+    get_nasa_apod(nasa_api_token, download_path)
+    get_nasa_epic(nasa_api_token, download_path, 1)
 
 
 if __name__ == "__main__":
