@@ -32,3 +32,11 @@ def get_caption_text(photo):
         return f'Astronomy Picture of the Day {date_apod} from NASA'
     elif 'spacex' in photo.name:
         return 'Photos from last SpaceX launch'
+
+
+def download_one_apod_img(nasa_apod: dict, path: str) -> None:
+    """Download One Astronomy Picture of the Day from NASA"""
+    nasa_apod_img_url = nasa_apod.get("hdurl", nasa_apod.get("url"))
+    nasa_apod_date = nasa_apod.get("date")
+    file_extension = get_file_extension(nasa_apod_img_url)
+    download_img(nasa_apod_img_url, f'{path}/apod_nasa_{nasa_apod_date}{file_extension}')

@@ -4,11 +4,11 @@ from pathlib import Path
 import requests
 from environs import Env
 
-from libs.download_utils import get_file_extension, download_img
+from libs.download_utils import download_img, download_one_apod_img
 
 
 def get_nasa_apod(token: str, path: str, images_count: int | None = None) -> None:
-    """Download Astronomy Picture of the Day from NASA"""
+    """Download One or More Astronomy Picture of the Day from NASA"""
     if not isinstance(images_count, int) or images_count < 1:
         images_count = None
     nasa_apod_url = f'https://api.nasa.gov/planetary/apod'
@@ -23,12 +23,10 @@ def get_nasa_apod(token: str, path: str, images_count: int | None = None) -> Non
 
     nasa_apods = response.json()
     if not images_count:
-        nasa_apods = [nasa_apods]
-    for nasa_apod in nasa_apods:
-        nasa_apod_img_url = nasa_apod.get("hdurl", nasa_apod.get("url"))
-        nasa_apod_date = nasa_apod.get("date")
-        file_extension = get_file_extension(nasa_apod_img_url)
-        download_img(nasa_apod_img_url, f'{path}/apod_nasa_{nasa_apod_date}{file_extension}')
+        download_one_apod_img(nasa_apods, path)
+    else:
+        for nasa_apod in nasa_apods:
+            download_one_apod_img(nasa_apod, path)
 
 
 def get_nasa_epic(token: str, path: str, images_count: int) -> None:
@@ -62,7 +60,7 @@ def main():
     download_path = "./images/nasa"
     Path(f"{download_path}").mkdir(parents=True, exist_ok=True)
     nasa_api_token = env("NASA_API_TOKEN")
-    get_nasa_apod(nasa_api_token, download_path)
+    get_nasa_apod(nasa_api_token, download_path, 5)
     get_nasa_epic(nasa_api_token, download_path, 1)
 
 
