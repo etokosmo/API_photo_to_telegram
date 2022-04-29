@@ -6,6 +6,9 @@ from environs import Env
 
 from libs.download_utils import download_img, get_file_extension
 
+COUNT_OF_DOWNLOADED_IMAGES_APOD = None
+COUNT_OF_DOWNLOADED_IMAGES_EPIC = 1
+
 
 def get_nasa_apod(token: str, path: str, images_count: int | None = None) -> None:
     """Download One or More Astronomy Picture of the Day from NASA"""
@@ -68,8 +71,8 @@ def main():
     download_path = "./images/nasa"
     Path(f"{download_path}").mkdir(parents=True, exist_ok=True)
     nasa_api_token = env("NASA_API_TOKEN")
-    get_nasa_apod(nasa_api_token, download_path, 5)
-    get_nasa_epic(nasa_api_token, download_path, 1)
+    get_nasa_apod(nasa_api_token, download_path, images_count=COUNT_OF_DOWNLOADED_IMAGES_APOD)
+    get_nasa_epic(nasa_api_token, download_path, images_count=COUNT_OF_DOWNLOADED_IMAGES_EPIC)
 
 
 if __name__ == "__main__":
