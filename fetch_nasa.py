@@ -4,7 +4,7 @@ from pathlib import Path
 import requests
 from environs import Env
 
-from libs.download_utils import download_img, download_one_apod_img
+from libs.download_utils import download_img, get_file_extension
 
 
 def get_nasa_apod(token: str, path: str, images_count: int | None = None) -> None:
@@ -51,6 +51,14 @@ def get_nasa_epic(token: str, path: str, images_count: int) -> None:
         response_img.raise_for_status()
 
         download_img(response_img.url, f'{path}/epic_nasa_{image}.png')
+
+
+def download_one_apod_img(nasa_apod: dict, path: str) -> None:
+    """Download One Astronomy Picture of the Day from NASA"""
+    nasa_apod_img_url = nasa_apod.get("hdurl", nasa_apod.get("url"))
+    nasa_apod_date = nasa_apod.get("date")
+    file_extension = get_file_extension(nasa_apod_img_url)
+    download_img(nasa_apod_img_url, f'{path}/apod_nasa_{nasa_apod_date}{file_extension}')
 
 
 def main():
