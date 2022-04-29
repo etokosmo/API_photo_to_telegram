@@ -14,6 +14,8 @@ def main():
     telegram_api_token = env("TELEGRAM_API_TOKEN")
     telegram_chat_id = env("TELEGRAM_CHAT_ID")
     sleep_time = env.int("SLEEP_TIME", 86400)
+    os.system('python fetch_spacex.py')
+    os.system('python fetch_nasa.py')
 
     while True:
         branches = os.walk("images")
