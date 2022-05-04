@@ -4,6 +4,8 @@ import time
 import telegram
 from environs import Env
 
+from fetch_nasa import main as fetch_nasa_main
+from fetch_spacex import main as fetch_spacex_main
 from libs.download_utils import get_caption_text
 
 SEARCH_ROOT_FOLDER = "images"
@@ -16,8 +18,8 @@ def main():
     telegram_api_token = env("TELEGRAM_API_TOKEN")
     telegram_chat_id = env("TELEGRAM_CHAT_ID")
     sleep_time = env.int("SLEEP_TIME", 86400)
-    os.system('python fetch_spacex.py')
-    os.system('python fetch_nasa.py')
+    fetch_spacex_main()
+    fetch_nasa_main()
 
     while True:
         branches = os.walk(SEARCH_ROOT_FOLDER)
