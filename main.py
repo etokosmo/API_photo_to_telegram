@@ -6,6 +6,8 @@ from environs import Env
 
 from libs.download_utils import get_caption_text
 
+SEARCH_ROOT_FOLDER = "images"
+
 
 def main():
     """Upload photos on telegram using bot"""
@@ -18,7 +20,7 @@ def main():
     os.system('python fetch_nasa.py')
 
     while True:
-        branches = os.walk("images")
+        branches = os.walk(SEARCH_ROOT_FOLDER)
         bot = telegram.Bot(token=telegram_api_token)
         for branch in branches:
             dirpath, dirnames, filenames = branch

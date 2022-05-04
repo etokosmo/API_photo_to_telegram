@@ -4,6 +4,8 @@ import requests
 
 from libs.download_utils import get_file_extension, download_img
 
+DOWNLOAD_PATH = "./images/spacex"
+
 
 def fetch_spacex_last_launch(path: str) -> None:
     """Download photos from last launch of SpaceX"""
@@ -21,9 +23,9 @@ def fetch_spacex_last_launch(path: str) -> None:
 
 def main():
     """Download images from SpaceX"""
-    download_path = "./images/spacex"
-    Path(f"{download_path}").mkdir(parents=True, exist_ok=True)
-    fetch_spacex_last_launch(download_path)
+
+    Path(f"{DOWNLOAD_PATH}").mkdir(parents=True, exist_ok=True)
+    fetch_spacex_last_launch(DOWNLOAD_PATH)
 
 
 if __name__ == "__main__":
