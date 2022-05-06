@@ -1,5 +1,6 @@
 import os
 import re
+from urllib.parse import urlsplit, unquote_plus
 
 import requests
 
@@ -17,7 +18,8 @@ def download_img(img_url: str, path_to_download: str) -> None:
 
 def get_file_extension(url: str) -> str:
     """Return file extension from URL"""
-    filename, file_extension = os.path.splitext(url)
+    truncated_url = unquote_plus(urlsplit(url, scheme='', allow_fragments=True).path)
+    filename, file_extension = os.path.splitext(truncated_url)
     return file_extension
 
 
